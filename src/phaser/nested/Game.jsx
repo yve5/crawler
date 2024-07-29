@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
 import { AUTO, Game } from 'phaser';
 
 const GameContainer = ({ options }) => {
@@ -24,10 +23,6 @@ const GameContainer = ({ options }) => {
   }, []);
 
   return <div className="Game" ref={container} />;
-};
-
-GameContainer.propTypes = {
-  options: PropTypes.object.isRequired,
 };
 
 export default GameContainer;
