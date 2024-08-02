@@ -1,6 +1,6 @@
 import { Scene } from 'phaser';
 
-const assetsPath = '/assets/';
+const assetsPath = '/crawler/assets/';
 
 class Showcase extends Scene {
   preload() {
