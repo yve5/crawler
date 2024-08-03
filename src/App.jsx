@@ -1,11 +1,13 @@
 import React from 'react';
-import Game from './phaser/showcase';
+import Crawler from './crawler';
+import Showcase from './showcase';
 
 import './App.css';
 
 const App = () => (
   <div className="App">
-    <Game />
+    <Crawler />
+    <Showcase />
   </div>
 );
 

@@ -1,6 +1,6 @@
 import React from 'react';
-import Game from '../nested/Game';
-import Scene from './Scene';
+import Game from '../shared/Container';
+import Main from './scenes/Main';
 
 const Home = () => (
   <Game
@@ -10,10 +10,12 @@ const Home = () => (
       physics: {
         default: 'arcade',
         arcade: {
-          gravity: { y: 200 },
+          gravity: {
+            y: 200,
+          },
         },
       },
-      scene: [Scene],
+      scene: [Main],
       banner: {
         hidePhaser: true,
       },

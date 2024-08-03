@@ -41,7 +41,8 @@
     "lint": "eslint",
     "test": "vitest",
     "test:ci": "vitest --pool=forks",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "deploy": "gh-pages -d build"
   },
   "browserslist": {
     "production": [
