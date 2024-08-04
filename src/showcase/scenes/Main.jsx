@@ -1,12 +1,12 @@
 import { Scene } from 'phaser';
 
-const assetsPath = '/crawler/assets/';
+const ASSETS_PATH = '/crawler/assets/showcase/';
 
 class Showcase extends Scene {
   preload() {
-    this.load.image('sky', `${assetsPath}space3.png`);
-    this.load.image('logo', `${assetsPath}phaser3.png`);
-    this.load.image('red', `${assetsPath}red.png`);
+    this.load.image('sky', `${ASSETS_PATH}space3.png`);
+    this.load.image('logo', `${ASSETS_PATH}phaser3.png`);
+    this.load.image('red', `${ASSETS_PATH}red.png`);
   }
 
   create() {
