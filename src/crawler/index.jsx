@@ -1,9 +1,10 @@
 import React from 'react';
 import Phaser from 'phaser';
 import Game from '../shared/Container';
-// import Main from './scenes/Main';
 
 import Info from './scenes/Info';
+import Dungeon from './scenes/Dungeon';
+import Reference from './scenes/Reference';
 
 const Home = () => (
   <Game
@@ -23,11 +24,7 @@ const Home = () => (
           },
         },
       },
-      scene: [
-        // DungeonScene,
-        Info,
-        // ReferenceScene,
-      ],
+      scene: [Dungeon, Info, Reference],
       //   scale: { mode: Phaser.Scale.RESIZE },
       banner: {
         hidePhaser: true,

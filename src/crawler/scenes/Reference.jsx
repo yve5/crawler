@@ -1,32 +1,34 @@
-import Phaser from "phaser";
-import Graphics from "../assets/Graphics";
-import Fonts from "../assets/Fonts";
+import Phaser from 'phaser';
+import Graphics from '../resources/Graphics';
+import { CRAWLER_FONT_PATH } from '../resources/constants';
 
 const tilesets = Object.values(Graphics);
 
 export default class ReferenceScene extends Phaser.Scene {
-  index: number;
-  group: Phaser.GameObjects.Group | null;
-  map: Phaser.Tilemaps.Tilemap | null;
-  title: Phaser.GameObjects.DynamicBitmapText | null;
-
   constructor() {
-    super("ReferenceScene");
+    super('ReferenceScene');
     this.index = 0;
     this.group = null;
     this.map = null;
     this.title = null;
   }
 
-  preload(): void {
-    tilesets.forEach(t => this.load.image(t.name, t.file));
-    this.load.bitmapFont("default", ...Fonts.default);
+  preload() {
+    tilesets.forEach(({ name, file }) => this.load.image(name, file));
+
+    this.load.bitmapFont(
+      'default',
+      `${CRAWLER_FONT_PATH}CasualEncounter.png`,
+      `${CRAWLER_FONT_PATH}CasualEncounter.fnt`
+    );
   }
 
-  create(): void {
-    this.title = this.add.dynamicBitmapText(20, 10, "default", "", 12);
+  create() {
+    this.title = this.add.dynamicBitmapText(20, 10, 'default', '', 12);
+
     this.previewTileset();
-    this.input.keyboard.on("keydown_N", () => {
+
+    this.input.keyboard.on('keydown_N', () => {
       this.index += 1;
       if (this.index >= tilesets.length) {
         this.index = 0;
@@ -35,16 +37,21 @@ export default class ReferenceScene extends Phaser.Scene {
       this.previewTileset();
     });
 
-    this.input.keyboard.on("keydown_R", () => {
-      this.scene.wake("DungeonScene");
+    this.input.keyboard.on('keydown_R', () => {
+      this.scene.wake('DungeonScene');
       this.scene.stop();
     });
   }
 
   reset() {
-    this.group && this.group.clear(true, true);
-    this.map && this.map.destroy();
+    if (this.group) {
+      this.group.clear(true, true);
+    }
     this.group = null;
+
+    if (this.map) {
+      this.map.destroy();
+    }
     this.map = null;
   }
 
@@ -54,11 +61,12 @@ export default class ReferenceScene extends Phaser.Scene {
 
     this.map = this.make.tilemap({
       tileWidth: tileset.width,
-      tileHeight: tileset.height
+      tileHeight: tileset.height,
     });
+
     const tiles = this.map.addTilesetImage(tileset.name);
     const layer = this.map.createBlankDynamicLayer(
-      "preview",
+      'preview',
       tiles,
       30,
       40,
@@ -82,13 +90,13 @@ export default class ReferenceScene extends Phaser.Scene {
     layer.setDepth(5);
     this.group.add(grid);
 
-    for (let y = 0; y < tiles.rows; y++) {
-      for (let x = 0; x < tiles.columns; x++) {
+    for (let y = 0; y < tiles.rows; y += 1) {
+      for (let x = 0; x < tiles.columns; x += 1) {
         const idx = y * tiles.columns + x;
         const text = this.add.bitmapText(
           this.map.tileToWorldX(x),
           this.map.tileToWorldY(y),
-          "default",
+          'default',
           idx.toString(16),
           6
         );
@@ -100,7 +108,7 @@ export default class ReferenceScene extends Phaser.Scene {
 
     this.group.add(layer);
 
-    this.title!.setText(
+    this.title.setText(
       `'${tileset.name}' (${this.index + 1} of ${
         tilesets.length
       }) ['n' for next]`

@@ -1,6 +1,5 @@
 import Phaser from 'phaser';
-
-const FONT_PATH = '/crawler/assets/fonts/';
+import { CRAWLER_FONT_PATH } from '../resources/constants';
 
 export default class InfoScene extends Phaser.Scene {
   constructor() {
@@ -10,8 +9,8 @@ export default class InfoScene extends Phaser.Scene {
   preload() {
     this.load.bitmapFont(
       'default',
-      `${FONT_PATH}CasualEncounter.png`,
-      `${FONT_PATH}CasualEncounter.fnt`
+      `${CRAWLER_FONT_PATH}CasualEncounter.png`,
+      `${CRAWLER_FONT_PATH}CasualEncounter.fnt`
     );
   }
 
