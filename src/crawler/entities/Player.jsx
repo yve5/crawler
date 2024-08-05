@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-// import Graphics from "../assets/Graphics";
+import Graphics from '../resources/Graphics';
 
 // const speed = 125;
 // const attackSpeed = 500;
@@ -7,18 +7,6 @@ import Phaser from 'phaser';
 // const staggerDuration = 200;
 // const staggerSpeed = 100;
 // const attackCooldown = attackDuration * 2;
-
-// interface Keys {
-//   up: Phaser.Input.Keyboard.Key;
-//   down: Phaser.Input.Keyboard.Key;
-//   left: Phaser.Input.Keyboard.Key;
-//   right: Phaser.Input.Keyboard.Key;
-//   space: Phaser.Input.Keyboard.Key;
-//   w: Phaser.Input.Keyboard.Key;
-//   a: Phaser.Input.Keyboard.Key;
-//   s: Phaser.Input.Keyboard.Key;
-//   d: Phaser.Input.Keyboard.Key;
-// }
 
 export default class Player {
   // public sprite: Phaser.Physics.Arcade.Sprite;
@@ -34,61 +22,67 @@ export default class Player {
   // private staggered: boolean;
   // private scene: Phaser.Scene;
   // private facingUp: boolean;
-  // constructor(x: number, y: number, scene: Phaser.Scene) {
-  //   this.scene = scene;
-  //   this.sprite = scene.physics.add.sprite(x, y, Graphics.player.name, 0);
-  //   this.sprite.setSize(8, 8);
-  //   this.sprite.setOffset(20, 28);
-  //   this.sprite.anims.play(Graphics.player.animations.idle.key);
-  //   this.facingUp = false;
-  //   this.sprite.setDepth(5);
-  //   this.keys = scene.input.keyboard.addKeys({
-  //     up: Phaser.Input.Keyboard.KeyCodes.UP,
-  //     down: Phaser.Input.Keyboard.KeyCodes.DOWN,
-  //     left: Phaser.Input.Keyboard.KeyCodes.LEFT,
-  //     right: Phaser.Input.Keyboard.KeyCodes.RIGHT,
-  //     space: Phaser.Input.Keyboard.KeyCodes.SPACE,
-  //     w: "w",
-  //     a: "a",
-  //     s: "s",
-  //     d: "d"
-  //   }) as Keys;
-  //   this.attackUntil = 0;
-  //   this.attackLockedUntil = 0;
-  //   this.attacking = false;
-  //   this.staggerUntil = 0;
-  //   this.staggered = false;
-  //   const particles = scene.add.particles(Graphics.player.name);
-  //   particles.setDepth(6);
-  //   this.emitter = particles.createEmitter({
-  //     alpha: { start: 0.7, end: 0, ease: "Cubic.easeOut" },
-  //     follow: this.sprite,
-  //     quantity: 1,
-  //     lifespan: 200,
-  //     blendMode: Phaser.BlendModes.ADD,
-  //     scaleX: () => (this.sprite.flipX ? -1 : 1),
-  //     emitCallback: (particle: Phaser.GameObjects.Particles.Particle) => {
-  //       particle.frame = this.sprite.frame;
-  //     }
-  //   });
-  //   this.emitter.stop();
-  //   this.flashEmitter = particles.createEmitter({
-  //     alpha: { start: 0.5, end: 0, ease: "Cubic.easeOut" },
-  //     follow: this.sprite,
-  //     quantity: 1,
-  //     lifespan: 100,
-  //     scaleX: () => (this.sprite.flipX ? -1 : 1),
-  //     emitCallback: (particle: Phaser.GameObjects.Particles.Particle) => {
-  //       particle.frame = this.sprite.frame;
-  //     }
-  //   });
-  //   this.flashEmitter.stop();
-  //   this.body = <Phaser.Physics.Arcade.Body>this.sprite.body;
-  //   this.time = 0;
-  // }
-  // isAttacking(): boolean {
-  //   return this.attacking;
-  // }
+
+  constructor(x, y, scene) {
+    this.scene = scene;
+    this.sprite = scene.physics.add.sprite(x, y, Graphics.player.name, 0);
+    this.sprite.setSize(8, 8);
+    this.sprite.setOffset(20, 28);
+    this.sprite.anims.play(Graphics.player.animations.idle.key);
+    this.facingUp = false;
+    this.sprite.setDepth(5);
+
+    //   this.keys = scene.input.keyboard.addKeys({
+    //     up: Phaser.Input.Keyboard.KeyCodes.UP,
+    //     down: Phaser.Input.Keyboard.KeyCodes.DOWN,
+    //     left: Phaser.Input.Keyboard.KeyCodes.LEFT,
+    //     right: Phaser.Input.Keyboard.KeyCodes.RIGHT,
+    //     space: Phaser.Input.Keyboard.KeyCodes.SPACE,
+    //     w: "w",
+    //     a: "a",
+    //     s: "s",
+    //     d: "d"
+    //   }) as Keys;
+
+    this.attackUntil = 0;
+    this.attackLockedUntil = 0;
+    this.attacking = false;
+    this.staggerUntil = 0;
+    this.staggered = false;
+
+    //   const particles = scene.add.particles(Graphics.player.name);
+    //   particles.setDepth(6);
+    //   this.emitter = particles.createEmitter({
+    //     alpha: { start: 0.7, end: 0, ease: "Cubic.easeOut" },
+    //     follow: this.sprite,
+    //     quantity: 1,
+    //     lifespan: 200,
+    //     blendMode: Phaser.BlendModes.ADD,
+    //     scaleX: () => (this.sprite.flipX ? -1 : 1),
+    //     emitCallback: (particle: Phaser.GameObjects.Particles.Particle) => {
+    //       particle.frame = this.sprite.frame;
+    //     }
+    //   });
+    //   this.emitter.stop();
+    //   this.flashEmitter = particles.createEmitter({
+    //     alpha: { start: 0.5, end: 0, ease: "Cubic.easeOut" },
+    //     follow: this.sprite,
+    //     quantity: 1,
+    //     lifespan: 100,
+    //     scaleX: () => (this.sprite.flipX ? -1 : 1),
+    //     emitCallback: (particle: Phaser.GameObjects.Particles.Particle) => {
+    //       particle.frame = this.sprite.frame;
+    //     }
+    //   });
+    //   this.flashEmitter.stop();
+    //   this.body = <Phaser.Physics.Arcade.Body>this.sprite.body;
+    //   this.time = 0;
+  }
+
+  isAttacking() {
+    return this.attacking;
+  }
+
   // stagger(): void {
   //   if (this.time > this.staggerUntil) {
   //     this.staggered = true;
