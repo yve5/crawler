@@ -1,27 +1,24 @@
-import Graphics from "../assets/Graphics";
-import Map from "../entities/Map";
-import { Mrpas } from "mrpas";
-import Phaser from "phaser";
+import Phaser from 'phaser';
+import { Mrpas } from 'mrpas';
+
+import Map from '../entities/Map.jsx';
+import Graphics from '../assets/Graphics.jsx';
 
 const radius = 7;
 const fogAlpha = 0.8;
-
 const lightDropoff = [0.7, 0.6, 0.3, 0.1];
 
 // Alpha to transition per MS given maximum distance between desired
 // and actual alpha
 const alphaPerMs = 0.004;
 
-function updateTileAlpha(
-  desiredAlpha: number,
-  delta: number,
-  tile: Phaser.Tilemaps.Tile
-) {
+function updateTileAlpha(desiredAlpha, delta, tile) {
   // Update faster the further away we are from the desired value,
   // but restrict the lower bound so we don't get it slowing
   // down infinitley.
   const distance = Math.max(Math.abs(tile.alpha - desiredAlpha), 0.05);
   const updateFactor = alphaPerMs * delta * distance;
+
   if (tile.alpha > desiredAlpha) {
     tile.setAlpha(Phaser.Math.MinSub(tile.alpha, updateFactor, desiredAlpha));
   } else if (tile.alpha < desiredAlpha) {
@@ -30,16 +27,11 @@ function updateTileAlpha(
 }
 
 export default class FOVLayer {
-  public layer: Phaser.Tilemaps.DynamicTilemapLayer;
-  private mrpas: Mrpas | undefined;
-  private lastPos: Phaser.Math.Vector2;
-  private map: Map;
-
-  constructor(map: Map) {
-    const utilTiles = map.tilemap.addTilesetImage("util");
+  constructor(map) {
+    const utilTiles = map.tilemap.addTilesetImage('util');
 
     this.layer = map.tilemap
-      .createBlankDynamicLayer("Dark", utilTiles, 0, 0)
+      .createBlankDynamicLayer('Dark', utilTiles, 0, 0)
       .fill(Graphics.util.indices.black);
     this.layer.setDepth(100);
 
@@ -50,20 +42,12 @@ export default class FOVLayer {
   }
 
   recalculate() {
-    this.mrpas = new Mrpas(
-      this.map.width,
-      this.map.height,
-      (x: number, y: number) => {
-        return this.map.tiles[y] && !this.map.tiles[y][x].collides;
-      }
-    );
+    this.mrpas = new Mrpas(this.map.width, this.map.height, (x, y) => {
+      return this.map.tiles[y] && !this.map.tiles[y][x].collides;
+    });
   }
 
-  update(
-    pos: Phaser.Math.Vector2,
-    bounds: Phaser.Geom.Rectangle,
-    delta: number
-  ) {
+  update(pos, bounds, delta) {
     if (!this.lastPos.equals(pos)) {
       this.updateMRPAS(pos);
       this.lastPos = pos.clone();
@@ -81,7 +65,7 @@ export default class FOVLayer {
     }
   }
 
-  updateMRPAS(pos: Phaser.Math.Vector2) {
+  updateMRPAS(pos) {
     // TODO: performance?
     for (let row of this.map.tiles) {
       for (let tile of row) {
@@ -91,12 +75,12 @@ export default class FOVLayer {
       }
     }
 
-    this.mrpas!.compute(
+    this.mrpas.compute(
       pos.x,
       pos.y,
       radius,
-      (x: number, y: number) => this.map.tiles[y][x].seen,
-      (x: number, y: number) => {
+      (x, y) => this.map.tiles[y][x].seen,
+      (x, y) => {
         const distance = Math.floor(
           new Phaser.Math.Vector2(x, y).distance(
             new Phaser.Math.Vector2(pos.x, pos.y)

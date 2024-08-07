@@ -1,21 +1,16 @@
-// import Map from "./map";
-import Graphics from '../resources/Graphics';
-
-// export enum TileType {
-//   None,
-//   Wall,
-//   Door
-// }
+import Phaser from 'phaser';
+import Map from './Map.jsx';
+import Graphics from '../assets/Graphics.jsx';
 
 export default class Tile {
   static tileTypeFor(type) {
     if (type === 'wall') {
       return 'TileType.Wall';
-    }
-    if (type === 'door') {
+    } else if (type === 'door') {
       return 'TileType.Door';
+    } else {
+      return 'TileType.None';
     }
-    return 'TileType.None';
   }
 
   constructor(type, x, y, map) {
@@ -49,8 +44,8 @@ export default class Tile {
   isEnclosed() {
     return (
       Object.values(this.neighbours()).filter(
-        ({ type, corridor }) =>
-          type === 'TileType.Wall' && corridor === this.corridor
+        (t) =>
+          !t || (t.type === 'TileType.Wall' && t.corridor === this.corridor)
       ).length === 8
     );
   }
@@ -147,8 +142,9 @@ export default class Tile {
     if (this.type === 'TileType.Door') {
       if (n || s) {
         return Graphics.environment.indices.doors.vertical;
+      } else {
+        return Graphics.environment.indices.doors.horizontal;
       }
-      return Graphics.environment.indices.doors.horizontal;
     }
 
     return 0;

@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import Graphics from '../resources/Graphics';
+import Graphics from '../assets/Graphics.jsx';
 
 const speed = 20;
 
@@ -25,22 +25,22 @@ export default class Slime {
     if (Phaser.Math.Between(0, 1) === 0) {
       this.body.setVelocity(0);
       this.sprite.anims.play(Graphics.slime.animations.idle.key, true);
-      //   } else {
-      //     this.sprite.anims.play(Graphics.slime.animations.move.key, true);
-      //     const direction = Phaser.Math.Between(0, 3);
-      //     this.body.setVelocity(0);
+    } else {
+      this.sprite.anims.play(Graphics.slime.animations.move.key, true);
+      const direction = Phaser.Math.Between(0, 3);
+      this.body.setVelocity(0);
 
-      //     if (!this.body.blocked.left && direction === 0) {
-      //       this.body.setVelocityX(-speed);
-      //     } else if (!this.body.blocked.right && direction <= 1) {
-      //       this.body.setVelocityX(speed);
-      //     } else if (!this.body.blocked.up && direction <= 2) {
-      //       this.body.setVelocityY(-speed);
-      //     } else if (!this.body.blocked.down && direction <= 3) {
-      //       this.body.setVelocityY(speed);
-      //     } else {
-      //       console.log(`Couldn't find direction for slime: ${direction}`);
-      //     }
+      if (!this.body.blocked.left && direction === 0) {
+        this.body.setVelocityX(-speed);
+      } else if (!this.body.blocked.right && direction <= 1) {
+        this.body.setVelocityX(speed);
+      } else if (!this.body.blocked.up && direction <= 2) {
+        this.body.setVelocityY(-speed);
+      } else if (!this.body.blocked.down && direction <= 3) {
+        this.body.setVelocityY(speed);
+      } else {
+        console.log(`Couldn't find direction for slime: ${direction}`);
+      }
     }
 
     this.nextAction = time + Phaser.Math.Between(1000, 3000);

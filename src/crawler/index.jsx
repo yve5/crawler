@@ -1,10 +1,11 @@
 import React from 'react';
 import Phaser from 'phaser';
-import Game from '../shared/Container';
+// import SceneWatcherPlugin from 'phaser-plugin-scene-watcher';
 
-import Info from './scenes/Info';
-import Dungeon from './scenes/Dungeon';
-import Reference from './scenes/Reference';
+import Game from '../shared/Container';
+import InfoScene from './scenes/InfoScene';
+import DungeonScene from './scenes/DungeonScene';
+import ReferenceScene from './scenes/ReferenceScene';
 
 const Home = () => (
   <Game
@@ -12,23 +13,20 @@ const Home = () => (
       type: Phaser.WEBGL,
       //   width: window.innerWidth,
       //   height: window.innerHeight,
-      render: {
-        pixelArt: true,
-      },
+      render: { pixelArt: true },
       physics: {
         default: 'arcade',
-        arcade: {
-          debug: false,
-          gravity: {
-            y: 0,
-          },
-        },
+        arcade: { debug: false, gravity: { y: 0 } },
       },
-      scene: [Dungeon, Info, Reference],
+      scene: [DungeonScene, InfoScene, ReferenceScene],
+
       //   scale: { mode: Phaser.Scale.RESIZE },
-      banner: {
-        hidePhaser: true,
-      },
+      // banner: {
+      //   hidePhaser: true,
+      // },
+      // plugins: {
+      //   global: [{ key: 'SceneWatcher', plugin: SceneWatcherPlugin, start: true }],
+      // },
     }}
   />
 );

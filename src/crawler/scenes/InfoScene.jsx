@@ -1,7 +1,5 @@
 import Phaser from 'phaser';
-// import Fonts from '../assets/Fonts';
-
-export const CRAWLER_FONT_PATH = '/crawler/assets/fonts/';
+import Fonts from '../assets/Fonts.jsx';
 
 export default class InfoScene extends Phaser.Scene {
   constructor() {
@@ -9,13 +7,7 @@ export default class InfoScene extends Phaser.Scene {
   }
 
   preload() {
-    // this.load.bitmapFont('default', ...Fonts.default);
-
-    this.load.bitmapFont(
-      'default',
-      `${CRAWLER_FONT_PATH}CasualEncounter.png`,
-      `${CRAWLER_FONT_PATH}CasualEncounter.fnt`
-    );
+    this.load.bitmapFont('default', ...Fonts.default);
   }
 
   create() {
@@ -24,7 +16,7 @@ export default class InfoScene extends Phaser.Scene {
     this.lastUpdate = 0;
   }
 
-  update(time) {
+  update(time, _) {
     if (time > this.lastUpdate + 100) {
       this.text.setText([
         'Dungeon Dash!',
@@ -36,7 +28,7 @@ export default class InfoScene extends Phaser.Scene {
         'Credits & more information at',
         'https://github.com/mipearson/dungeondash',
         '',
-        `FPS: ${Math.round(this.game.loop.actualFps)}`,
+        'FPS: ' + Math.round(this.game.loop.actualFps),
       ]);
       this.lastUpdate = time;
     }

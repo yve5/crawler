@@ -8,4 +8,9 @@ export default defineConfig({
   build: { outDir: './build' },
   assetsInclude: ['**/*.md'],
   base: '/crawler',
+  define: {
+    // By default, Vite doesn't include shims for NodeJS/
+    // necessary for segment analytics lib to work
+    global: {},
+  },
 });

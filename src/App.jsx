@@ -1,13 +1,12 @@
 import React from 'react';
-import Dungeon from './dungeondash';
-// import Crawler from './crawler';
+import Crawler from './crawler';
 // import Showcase from './showcase';
 
 import './App.css';
 
 const App = () => (
   <div className="App">
-    <Dungeon />
+    <Crawler />
   </div>
 );
 
