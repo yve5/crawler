@@ -1,42 +1,41 @@
 import Phaser from 'phaser';
 import Dungeoneer from 'dungeoneer';
-import Tile from './Tile.jsx';
-import Slime from './Slime.jsx';
-import Graphics from '../assets/Graphics.jsx';
-// import DungeonScene from '../scenes/DungeonScene.jsx';
+
+import Tile from './Tile';
+import Slime from './Slime';
+import Graphics from '../assets/Graphics';
+// import DungeonScene from '../scenes/DungeonScene';
+import { TILE_TYPE_NONE, TILE_TYPE_WALL } from '../assets/constants';
 
 export default class Map {
   constructor(width, height, scene) {
-    const dungeon = Dungeoneer.build({
-      width: width,
-      height: height,
-    });
+    const dungeon = Dungeoneer.build({ width, height });
     this.rooms = dungeon.rooms;
 
     this.width = width;
     this.height = height;
 
     this.tiles = [];
-    for (let y = 0; y < height; y++) {
+    for (let y = 0; y < height; y += 1) {
       this.tiles.push([]);
-      for (let x = 0; x < width; x++) {
+      for (let x = 0; x < width; x += 1) {
         const tileType = Tile.tileTypeFor(dungeon.tiles[x][y].type);
         this.tiles[y][x] = new Tile(tileType, x, y, this);
       }
     }
 
     const toReset = [];
-    for (let y = 0; y < height; y++) {
-      for (let x = 0; x < width; x++) {
+    for (let y = 0; y < height; y += 1) {
+      for (let x = 0; x < width; x += 1) {
         const tile = this.tiles[y][x];
-        if (tile.type === 'TileType.Wall' && tile.isEnclosed()) {
-          toReset.push({ y: y, x: x });
+        if (tile.type === TILE_TYPE_WALL && tile.isEnclosed()) {
+          toReset.push({ y, x });
         }
       }
     }
 
     toReset.forEach((d) => {
-      this.tiles[d.y][d.x] = new Tile('TileType.None', d.x, d.y, this);
+      this.tiles[d.y][d.x] = new Tile(TILE_TYPE_NONE, d.x, d.y, this);
     });
 
     const roomNumber = Math.floor(Math.random() * dungeon.rooms.length);
@@ -48,8 +47,8 @@ export default class Map {
     this.tilemap = scene.make.tilemap({
       tileWidth: Graphics.environment.width,
       tileHeight: Graphics.environment.height,
-      width: width,
-      height: height,
+      width,
+      height,
     });
 
     const dungeonTiles = this.tilemap.addTilesetImage(
@@ -73,7 +72,9 @@ export default class Map {
 
     this.slimes = [];
 
-    for (let room of dungeon.rooms) {
+    for (let index = 0; index < dungeon.rooms.length; index += 1) {
+      const room = dungeon.rooms[index];
+
       groundLayer.randomize(
         room.x - 1,
         room.y - 1,
@@ -82,24 +83,23 @@ export default class Map {
         Graphics.environment.indices.floor.outer
       );
 
-      if (room.height < 4 || room.width < 4) {
-        continue;
-      }
-
-      const roomTL = this.tilemap.tileToWorldXY(room.x + 1, room.y + 1);
-      const roomBounds = this.tilemap.tileToWorldXY(
-        room.x + room.width - 1,
-        room.y + room.height - 1
-      );
-      const numSlimes = Phaser.Math.Between(1, 3);
-      for (let i = 0; i < numSlimes; i++) {
-        this.slimes.push(
-          new Slime(
-            Phaser.Math.Between(roomTL.x, roomBounds.x),
-            Phaser.Math.Between(roomTL.y, roomBounds.y),
-            scene
-          )
+      if (!(room.height < 4 || room.width < 4)) {
+        const roomTL = this.tilemap.tileToWorldXY(room.x + 1, room.y + 1);
+        const roomBounds = this.tilemap.tileToWorldXY(
+          room.x + room.width - 1,
+          room.y + room.height - 1
         );
+        const numSlimes = Phaser.Math.Between(1, 3);
+
+        for (let i = 0; i < numSlimes; i += 1) {
+          this.slimes.push(
+            new Slime(
+              Phaser.Math.Between(roomTL.x, roomBounds.x),
+              Phaser.Math.Between(roomTL.y, roomBounds.y),
+              scene
+            )
+          );
+        }
       }
     }
     this.tilemap.convertLayerToStatic(groundLayer).setDepth(1);
@@ -118,12 +118,12 @@ export default class Map {
       0
     );
 
-    for (let x = 0; x < width; x++) {
-      for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x += 1) {
+      for (let y = 0; y < height; y += 1) {
         const tile = this.tiles[y][x];
-        if (tile.type === 'TileType.Wall') {
+        if (tile.type === TILE_TYPE_WALL) {
           wallLayer.putTileAt(tile.spriteIndex(), x, y);
-        } else if (tile.type === 'TileType.Door') {
+        } else if (tile.type === 'TILE_TYPE_DOOR') {
           this.doorLayer.putTileAt(tile.spriteIndex(), x, y);
         }
       }
@@ -168,7 +168,7 @@ export default class Map {
         return (
           y >= top - 1 && y <= bottom + 1 && x >= left - 1 && x <= right + 1
         );
-      }) != undefined
+      }) !== undefined
     );
   }
 }

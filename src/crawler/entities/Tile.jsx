@@ -1,21 +1,24 @@
-import Phaser from 'phaser';
-import Map from './Map.jsx';
-import Graphics from '../assets/Graphics.jsx';
+import Graphics from '../assets/Graphics';
+import {
+  TILE_TYPE_DOOR,
+  TILE_TYPE_NONE,
+  TILE_TYPE_WALL,
+} from '../assets/constants';
 
 export default class Tile {
   static tileTypeFor(type) {
     if (type === 'wall') {
-      return 'TileType.Wall';
-    } else if (type === 'door') {
-      return 'TileType.Door';
-    } else {
-      return 'TileType.None';
+      return TILE_TYPE_WALL;
     }
+    if (type === 'door') {
+      return TILE_TYPE_DOOR;
+    }
+    return TILE_TYPE_NONE;
   }
 
   constructor(type, x, y, map) {
     this.type = type;
-    this.collides = type !== 'TileType.None';
+    this.collides = type !== TILE_TYPE_DOOR;
     this.map = map;
     this.x = x;
     this.y = y;
@@ -44,14 +47,13 @@ export default class Tile {
   isEnclosed() {
     return (
       Object.values(this.neighbours()).filter(
-        (t) =>
-          !t || (t.type === 'TileType.Wall' && t.corridor === this.corridor)
+        (t) => !t || (t.type === TILE_TYPE_WALL && t.corridor === this.corridor)
       ).length === 8
     );
   }
 
   spriteIndex() {
-    const modifier = this.type === 'TileType.Wall' && this.corridor ? 8 : 0;
+    const modifier = this.type === TILE_TYPE_WALL && this.corridor ? 8 : 0;
     return this.rawIndex() + modifier;
   }
 
@@ -60,27 +62,27 @@ export default class Tile {
 
     const n =
       neighbours.n &&
-      neighbours.n.type === 'TileType.Wall' &&
+      neighbours.n.type === TILE_TYPE_WALL &&
       neighbours.n.corridor === this.corridor;
     const s =
       neighbours.s &&
-      neighbours.s.type === 'TileType.Wall' &&
+      neighbours.s.type === TILE_TYPE_WALL &&
       neighbours.s.corridor === this.corridor;
     const w =
       neighbours.w &&
-      neighbours.w.type === 'TileType.Wall' &&
+      neighbours.w.type === TILE_TYPE_WALL &&
       neighbours.w.corridor === this.corridor;
     const e =
       neighbours.e &&
-      neighbours.e.type === 'TileType.Wall' &&
+      neighbours.e.type === TILE_TYPE_WALL &&
       neighbours.e.corridor === this.corridor;
 
-    const wDoor = neighbours.w && neighbours.w.type === 'TileType.Door';
-    const eDoor = neighbours.e && neighbours.e.type === 'TileType.Door';
+    const wDoor = neighbours.w && neighbours.w.type === TILE_TYPE_DOOR;
+    const eDoor = neighbours.e && neighbours.e.type === TILE_TYPE_DOOR;
 
     const i = Graphics.environment.indices.walls;
 
-    if (this.type === 'TileType.Wall') {
+    if (this.type === TILE_TYPE_WALL) {
       if (n && e && s && w) {
         return i.intersections.n_e_s_w;
       }
@@ -139,12 +141,11 @@ export default class Tile {
       return i.alone;
     }
 
-    if (this.type === 'TileType.Door') {
+    if (this.type === TILE_TYPE_DOOR) {
       if (n || s) {
         return Graphics.environment.indices.doors.vertical;
-      } else {
-        return Graphics.environment.indices.doors.horizontal;
       }
+      return Graphics.environment.indices.doors.horizontal;
     }
 
     return 0;

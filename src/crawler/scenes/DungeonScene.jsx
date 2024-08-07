@@ -1,9 +1,8 @@
 import Phaser from 'phaser';
-import Graphics from '../assets/Graphics.jsx';
-import FOVLayer from '../entities/FOVLayer.jsx';
-import Player from '../entities/Player.jsx';
-import Slime from '../entities/Slime.jsx';
-import Map from '../entities/Map.jsx';
+import Graphics from '../assets/Graphics';
+import FOVLayer from '../entities/FOVLayer';
+import Player from '../entities/Player';
+import Map from '../entities/Map';
 
 const worldTileHeight = 81;
 const worldTileWidth = 81;
@@ -36,18 +35,18 @@ export default class DungeonScene extends Phaser.Scene {
   slimePlayerCollide(_, slimeSprite) {
     const slime = this.slimes.find((s) => s.sprite === slimeSprite);
     if (!slime) {
-      console.log('Missing slime for sprite collision!');
-      return;
+      console.warn('Missing slime for sprite collision!');
+      return false;
     }
 
     if (this.player.isAttacking()) {
-      this.slimes = this.slimes.filter((s) => s != slime);
+      this.slimes = this.slimes.filter((s) => s !== slime);
       slime.kill();
       return false;
-    } else {
-      this.player.stagger();
-      return true;
     }
+
+    this.player.stagger();
+    return true;
   }
 
   create() {
@@ -152,7 +151,9 @@ export default class DungeonScene extends Phaser.Scene {
     this.roomDebugGraphics.setVisible(false);
     this.roomDebugGraphics.lineStyle(2, 0xff5500, 0.5);
 
-    for (let room of map.rooms) {
+    for (let index = 0; index < map.rooms.length; index += 1) {
+      const room = map.rooms[index];
+
       this.roomDebugGraphics.strokeRect(
         this.tilemap.tileToWorldX(room.x),
         this.tilemap.tileToWorldY(room.y),
@@ -169,7 +170,8 @@ export default class DungeonScene extends Phaser.Scene {
 
     const camera = this.cameras.main;
 
-    for (let slime of this.slimes) {
+    for (let index = 0; index < this.slimes.length; index += 1) {
+      const slime = this.slimes[index];
       slime.update(time);
     }
 

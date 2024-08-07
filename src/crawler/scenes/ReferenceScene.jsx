@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
-import Graphics from '../assets/Graphics.jsx';
-import Fonts from '../assets/Fonts.jsx';
+import Graphics from '../assets/Graphics';
+import Fonts from '../assets/Fonts';
 
 const tilesets = Object.values(Graphics);
 
@@ -37,8 +37,8 @@ export default class ReferenceScene extends Phaser.Scene {
   }
 
   reset() {
-    this.group && this.group.clear(true, true);
-    this.map && this.map.destroy();
+    if (this.group) this.group.clear(true, true);
+    if (this.map) this.map.destroy();
     this.group = null;
     this.map = null;
   }
@@ -77,8 +77,8 @@ export default class ReferenceScene extends Phaser.Scene {
     layer.setDepth(5);
     this.group.add(grid);
 
-    for (let y = 0; y < tiles.rows; y++) {
-      for (let x = 0; x < tiles.columns; x++) {
+    for (let y = 0; y < tiles.rows; y += 1) {
+      for (let x = 0; x < tiles.columns; x += 1) {
         const idx = y * tiles.columns + x;
         const text = this.add.bitmapText(
           this.map.tileToWorldX(x),

@@ -1,8 +1,7 @@
 import Phaser from 'phaser';
 import { Mrpas } from 'mrpas';
 
-import Map from '../entities/Map.jsx';
-import Graphics from '../assets/Graphics.jsx';
+import Graphics from '../assets/Graphics';
 
 const radius = 7;
 const fogAlpha = 0.8;
@@ -12,7 +11,7 @@ const lightDropoff = [0.7, 0.6, 0.3, 0.1];
 // and actual alpha
 const alphaPerMs = 0.004;
 
-function updateTileAlpha(desiredAlpha, delta, tile) {
+const updateTileAlpha = (desiredAlpha, delta, tile) => {
   // Update faster the further away we are from the desired value,
   // but restrict the lower bound so we don't get it slowing
   // down infinitley.
@@ -24,7 +23,7 @@ function updateTileAlpha(desiredAlpha, delta, tile) {
   } else if (tile.alpha < desiredAlpha) {
     tile.setAlpha(Phaser.Math.MaxAdd(tile.alpha, updateFactor, desiredAlpha));
   }
-}
+};
 
 export default class FOVLayer {
   constructor(map) {
@@ -42,9 +41,11 @@ export default class FOVLayer {
   }
 
   recalculate() {
-    this.mrpas = new Mrpas(this.map.width, this.map.height, (x, y) => {
-      return this.map.tiles[y] && !this.map.tiles[y][x].collides;
-    });
+    this.mrpas = new Mrpas(
+      this.map.width,
+      this.map.height,
+      (x, y) => this.map.tiles[y] && !this.map.tiles[y][x].collides
+    );
   }
 
   update(pos, bounds, delta) {
@@ -53,25 +54,30 @@ export default class FOVLayer {
       this.lastPos = pos.clone();
     }
 
-    for (let y = bounds.y; y < bounds.y + bounds.height; y++) {
-      for (let x = bounds.x; x < bounds.x + bounds.width; x++) {
-        if (y < 0 || y >= this.map.height || x < 0 || x >= this.map.width) {
-          continue;
+    const bx = bounds.x;
+    const by = bounds.y;
+
+    for (let y = by; y < by + bounds.height; y += 1) {
+      for (let x = bx; x < bx + bounds.width; x += 1) {
+        if (!(y < 0 || y >= this.map.height || x < 0 || x >= this.map.width)) {
+          updateTileAlpha(
+            this.map.tiles[y][x].desiredAlpha,
+            delta,
+            this.layer.getTileAt(x, y)
+          );
         }
-        const desiredAlpha = this.map.tiles[y][x].desiredAlpha;
-        const tile = this.layer.getTileAt(x, y);
-        updateTileAlpha(desiredAlpha, delta, tile);
       }
     }
   }
 
   updateMRPAS(pos) {
     // TODO: performance?
-    for (let row of this.map.tiles) {
-      for (let tile of row) {
-        if (tile.seen) {
-          tile.desiredAlpha = fogAlpha;
-        }
+    for (let i = 0; i < this.map.tiles.length; i += 1) {
+      const row = this.map.tiles[i];
+
+      for (let j = 0; j < row.length; j += 1) {
+        const tile = row[j];
+        if (tile.seen) tile.desiredAlpha = fogAlpha;
       }
     }
 
@@ -90,6 +96,7 @@ export default class FOVLayer {
         const rolloffIdx = distance <= radius ? radius - distance : 0;
         const alpha =
           rolloffIdx < lightDropoff.length ? lightDropoff[rolloffIdx] : 0;
+
         this.map.tiles[y][x].desiredAlpha = alpha;
         this.map.tiles[y][x].seen = true;
       }

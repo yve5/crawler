@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import Fonts from '../assets/Fonts.jsx';
+import Fonts from '../assets/Fonts';
 
 export default class InfoScene extends Phaser.Scene {
   constructor() {
@@ -16,7 +16,7 @@ export default class InfoScene extends Phaser.Scene {
     this.lastUpdate = 0;
   }
 
-  update(time, _) {
+  update(time) {
     if (time > this.lastUpdate + 100) {
       this.text.setText([
         'Dungeon Dash!',
@@ -25,10 +25,7 @@ export default class InfoScene extends Phaser.Scene {
         'Press space while moving to dash-attack!',
         '(debug: Q, tilesets: R)',
         '',
-        'Credits & more information at',
-        'https://github.com/mipearson/dungeondash',
-        '',
-        'FPS: ' + Math.round(this.game.loop.actualFps),
+        `FPS: ${Math.round(this.game.loop.actualFps)}`,
       ]);
       this.lastUpdate = time;
     }

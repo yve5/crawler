@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import Graphics from '../assets/Graphics.jsx';
+import Graphics from '../assets/Graphics';
 
 const speed = 20;
 
@@ -39,7 +39,7 @@ export default class Slime {
       } else if (!this.body.blocked.down && direction <= 3) {
         this.body.setVelocityY(speed);
       } else {
-        console.log(`Couldn't find direction for slime: ${direction}`);
+        console.warn(`Couldn't find direction for slime: ${direction}`);
       }
     }
 

@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import Graphics from '../assets/Graphics.jsx';
+import Graphics from '../assets/Graphics';
 
 const speed = 125;
 const attackSpeed = 500;
@@ -47,6 +47,7 @@ export default class Player {
       blendMode: Phaser.BlendModes.ADD,
       scaleX: () => (this.sprite.flipX ? -1 : 1),
       emitCallback: (particle) => {
+        // eslint-disable-next-line
         particle.frame = this.sprite.frame;
       },
     });
@@ -59,6 +60,7 @@ export default class Player {
       lifespan: 100,
       scaleX: () => (this.sprite.flipX ? -1 : 1),
       emitCallback: (particle) => {
+        // eslint-disable-next-line
         particle.frame = this.sprite.frame;
       },
     });
@@ -83,7 +85,7 @@ export default class Player {
 
   update(time) {
     this.time = time;
-    const keys = this.keys;
+    const keys = { ...this.keys };
     let attackAnim = '';
     let moveAnim = '';
 
