@@ -11,19 +11,16 @@ const Home = () => (
   <Game
     options={{
       type: Phaser.WEBGL,
-      //   width: window.innerWidth,
-      //   height: window.innerHeight,
+      width: window.innerWidth,
+      height: window.innerHeight - 6,
       render: { pixelArt: true },
       physics: {
         default: 'arcade',
         arcade: { debug: false, gravity: { y: 0 } },
       },
       scene: [DungeonScene, InfoScene, ReferenceScene],
-
-      //   scale: { mode: Phaser.Scale.RESIZE },
-      // banner: {
-      //   hidePhaser: true,
-      // },
+      scale: { mode: Phaser.Scale.RESIZE },
+      banner: { hidePhaser: true },
       // plugins: {
       //   global: [{ key: 'SceneWatcher', plugin: SceneWatcherPlugin, start: true }],
       // },
