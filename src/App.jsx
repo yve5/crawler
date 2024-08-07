@@ -1,5 +1,5 @@
 import React from 'react';
-import Dungeon from './dungeon';
+import Dungeon from './dungeondash';
 // import Crawler from './crawler';
 // import Showcase from './showcase';
 
