@@ -1,12 +1,11 @@
 import React from 'react';
-import Crawler from './crawler';
-// import Showcase from './showcase';
+import Demo from './test';
 
 import './App.css';
 
 const App = () => (
   <div className="App">
-    <Crawler />
+    <Demo />
   </div>
 );
 
