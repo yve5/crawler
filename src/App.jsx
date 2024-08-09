@@ -1,5 +1,5 @@
 import React from 'react';
-import Demo from './test';
+import Demo from './checker';
 
 import './App.css';
 

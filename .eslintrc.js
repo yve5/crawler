@@ -68,5 +68,8 @@ module.exports = {
     'no-unused-vars': 'warn',
     'no-multiple-empty-lines': 'warn',
     'prefer-const': 'warn',
+
+    'class-methods-use-this': 'off',
+    'no-param-reassign': 'off',
   },
 };
